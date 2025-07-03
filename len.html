@@ -1,0 +1,68 @@
+
+<div qv-extension style="height: 100%; width: 100%; position: relative; overflow: auto; box-sizing: border-box;z-index:99999;">
+
+	<div id="questionArea">
+		
+	</div>
+	
+<button class="open-button" id="openChat">AI CHATBOT</button>
+
+<div class="chat-popup" id="myForm">
+
+    <button type="button" class="btn cancel close-btn" id="closeChat"><i class="fa fa-close" aria-hidden="true"></i></button>
+  <form class="form-container">
+    <h1 class="chatbot_title" style="margin-bottom:10px;" >
+	WELCOME TO THE MMB ANALYTICS: EXPLORE <span id="welcome_msg"></span> </h1>
+	
+         <div id="chatHistory"></div>
+	<div id="GPTAnswear" name="GPTAnswear">
+		
+	</div>
+	
+
+	
+	<div class="inputArea">
+		
+		<div class="role-container">
+
+			<div class="role_container">
+				<button id="Analyst" class="analyst role-btn selected">Data Analyst</button>
+				<button id="Hr" class="hr role-btn">Hr Leader</button>
+				<button id="Consultant" class="consultant role-btn">Business Consultant</button>
+			</div>
+			<div class="chat_history_container">
+			<button id="download-button" class="btn" title="Download Current CHat History"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+			</div>
+
+		</div>
+		<div class="input-container">
+		
+			<input type="text" id="question"  placeholder="Ask question..." >
+			
+			<div class="send-btn-div">
+				<button id="startRecognition" class="mic-icon mic btn">
+					<i class="fas fa-microphone"></i>
+		     	</button>
+			    <button type="submit" class="btn" id="btn"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			</div>
+			
+		</div>
+	
+		</div>
+		
+		<!--<input type="text" id="speechInput" placeholder="Your speech will appear here..." style="width: 100%; padding: 10px; font-size: 16px;"/>-->
+<!--<div class="hear-responce">
+  		
+        <button id="speak-button"><i class="fa fa-volume-up" aria-hidden="true"></i></button>
+
+
+		
+</div>-->
+
+<div  id="data_set" style="display:none;">
+
+</div>
+  </form>
+</div>
+</div>
+
