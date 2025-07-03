@@ -1,0 +1,72 @@
+const fetchDataAndProcess = async (objectID) => {
+  const jsonDataArray = [];
+
+  try {
+    const model = await app.getObject(objectID);
+    const layout = model.layout;
+
+    if (!layout.qHyperCube) {
+      return []; // No hypercube, no data
+    }
+
+    const totalDimensions = layout.qHyperCube.qDimensionInfo.length;
+    const totalMeasures = layout.qHyperCube.qMeasureInfo.length;
+    const totalColumns = totalDimensions + totalMeasures;
+
+    if(totalColumns === 0) return [];
+
+    const totalRows = layout.qHyperCube.qSize.qcy;
+
+    const pageSize = 500; // reduced page size for safety
+    const totalPages = Math.min(Math.ceil(totalRows / pageSize), 5); // limit max pages to 5 for max 2500 rows per object
+
+    const headers = layout.qHyperCube.qDimensionInfo
+                    .map(d => d.qFallbackTitle)
+                    .concat(layout.qHyperCube.qMeasureInfo.map(m => m.qFallbackTitle))
+                    .filter(h => h !== undefined);
+
+    for (let currentPage = 0; currentPage < totalPages; currentPage++) {
+      const qTop = currentPage * pageSize;
+      const qHeight = Math.min(pageSize, totalRows - qTop);
+
+      if (qHeight <= 0) break;
+
+      const dataPages = await model.getHyperCubeData('/qHyperCubeDef', [{
+        qTop,
+        qLeft: 0,
+        qWidth: totalColumns,
+        qHeight
+      }]);
+
+      dataPages[0].qMatrix.forEach(data => {
+        const jsonData = {};
+        headers.forEach((header, index) => {
+          jsonData[header] = data[index]?.qText || null;
+        });
+        jsonDataArray.push(jsonData);
+      });
+    }
+  } catch (error) {
+    console.warn(`Error fetching data for object ${objectID}:`, error);
+    return [];
+  }
+  return jsonDataArray;
+};
+
+
+
+
+
+const fetchAllDataFromObjects = async (objectIDs) => {
+  let allObjectsData = [];
+
+  // Fetch sequentially or in small batches to avoid flooding
+  for (const objId of objectIDs) {
+    const objData = await fetchDataAndProcess(objId);
+    if (objData.length > 0) {
+      allObjectsData.push({ objectId: objId, data: objData });
+    }
+  }
+
+  return allObjectsData;
+};
